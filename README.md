@@ -10,7 +10,7 @@
 **Установка и запуск**
 - Клонируйте репозиторий:
 ```
-git clone https://github.com/username/order-service.git
+git clone https://github.com/Mrsananabos/orderService.git
 cd order-service
 ```
 - Запустите сервисы с помощью Docker Compose:

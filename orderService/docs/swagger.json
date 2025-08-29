@@ -1,0 +1,127 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Order service API Docs",
+        "title": "Order Service",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/order/{id}": {
+            "get": {
+                "description": "Return order by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Get Order by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get order by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.OrderView"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.DeliveryView": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "zip": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ItemView": {
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "totalPrice": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.OrderView": {
+            "type": "object",
+            "properties": {
+                "dateCreated": {
+                    "type": "string"
+                },
+                "delivery": {
+                    "$ref": "#/definitions/models.DeliveryView"
+                },
+                "deliveryService": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ItemView"
+                    }
+                },
+                "payment": {
+                    "$ref": "#/definitions/models.PaymentView"
+                }
+            }
+        },
+        "models.PaymentView": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "deliveryCost": {
+                    "type": "integer"
+                },
+                "goodsTotal": {
+                    "type": "integer"
+                },
+                "provider": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

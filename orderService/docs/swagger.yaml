@@ -1,0 +1,83 @@
+basePath: /api
+definitions:
+  models.DeliveryView:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      region:
+        type: string
+      zip:
+        type: string
+    type: object
+  models.ItemView:
+    properties:
+      brand:
+        type: string
+      name:
+        type: string
+      totalPrice:
+        type: integer
+    type: object
+  models.OrderView:
+    properties:
+      dateCreated:
+        type: string
+      delivery:
+        $ref: '#/definitions/models.DeliveryView'
+      deliveryService:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/models.ItemView'
+        type: array
+      payment:
+        $ref: '#/definitions/models.PaymentView'
+    type: object
+  models.PaymentView:
+    properties:
+      amount:
+        type: integer
+      currency:
+        type: string
+      deliveryCost:
+        type: integer
+      goodsTotal:
+        type: integer
+      provider:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Order service API Docs
+  title: Order Service
+  version: "1.0"
+paths:
+  /order/{id}:
+    get:
+      description: Return order by id
+      parameters:
+      - description: Get order by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderView'
+      summary: Get Order by id
+      tags:
+      - order
+swagger: "2.0"

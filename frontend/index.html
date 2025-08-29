@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о заказе</title>
+    <script>
+        async function getOrderInfo() {
+            const orderId = document.getElementById("orderId").value;
+            const orderInfoContainer = document.getElementById("orderInfo");
+
+            // Проверка на пустое поле ввода
+            if (!orderId) {
+                orderInfoContainer.innerText = 'Пожалуйста, введите ID заказа.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/order/${orderId}`);
+
+                // Очистка предыдущей информации
+                orderInfoContainer.innerText = '';
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Форматирование вывода
+                    const deliveryService = `Сервис доставки: ${data.DeliveryService}`;
+                    const dateString = data.DateCreated;
+                    const date = new Date(dateString);
+                    const formattedDate = date.toISOString().split('T')[0];
+                    const dateCreated = `Дата создания: ${formattedDate}`;
+                    const deliveryInfo = `Получатель:\n  Имя: ${data.Delivery.Name}\n  Телефон: ${data.Delivery.Phone}\n  Почтовый индекс: ${data.Delivery.Zip}\n  Город: ${data.Delivery.City}\n  Адрес: ${data.Delivery.Address}\n  Регион: ${data.Delivery.Region}\n  Email: ${data.Delivery.Email}`;
+                    const paymentInfo = `Платеж:\n  Валюта: ${data.Payment.Currency}\n  Провайдер: ${data.Payment.Provider}\n  Стоимость товаров: ${data.Payment.GoodsTotal}\n  Стоимость доставки: ${data.Payment.DeliveryCost}\n  Итого: ${data.Payment.Amount}`;
+
+                    let itemsInfo = 'Товары:';
+                    data.Items.forEach(item => {
+                        itemsInfo += `  \nТовар: ${item.Name},\n Бренд: ${item.Brand},\n Общая стоимость: ${item.TotalPrice}\n`;
+                    });
+
+                    // Вывод информации
+                    orderInfoContainer.innerText = `${deliveryService}\n${dateCreated}\n\n${deliveryInfo}\n\n${itemsInfo}\n${paymentInfo}`;
+                } else if (response.status === 400) {
+                    orderInfoContainer.innerText = 'Некорректный ID заказа.';
+                } else if (response.status === 404) {
+                    orderInfoContainer.innerText = 'По такому ID заказ не найден.';
+                } else {
+                    orderInfoContainer.innerText = 'Ошибка при получении данных.';
+                }
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+                orderInfoContainer.innerText = 'Ошибка при получении данных.';
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Получить информацию о заказе</h1>
+<input type="text" id="orderId" placeholder="Введите ID заказа">
+<button onclick="getOrderInfo()">Информация о заказе</button>
+
+<h2>Информация о доставке:</h2>
+<pre id="orderInfo"></pre>
+</body>
+</html>

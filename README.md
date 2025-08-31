@@ -17,6 +17,8 @@ cd order-service
 ```
 docker compose up -d --build   
 ```
+- Создайте схему orders в postgres
+- Создайте в Kafka топик Orders
 ### Использование
 **Получение информации о заказе**
 ```
